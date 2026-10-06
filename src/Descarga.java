@@ -1,3 +1,7 @@
+/**
+ * Clase Descarga con run() que simula una descarga
+ * @author Anxo Vázquez
+ */
 public class Descarga extends Thread {
     public int tiempoBloque;
     public String nombreArchivo;

@@ -1,40 +1,49 @@
 import java.util.Scanner;
 
+/**
+ * Clase Gestor descargas encargada de interactuar con el usuario
+ * @author Anxo Vázquez
+ */
 public class GestorDescargas {
+    /**
+     * Main que pide al usuario números (selectorNivel) y lanza el nivel correspondiente
+     * @param args
+     */
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        sc.useDelimiter("\n");
-
-        if(selectorNivel() == 1){
-            nivel1();
-        } else if (selectorNivel() == 2) {
-            nivel2();
-        }
-
-
-        sc.close();
+        int opcion = selectorNivel();
+        nivel1y2(args, opcion);
     }
 
     /**
-     * Nivel 1
-     * Lanza las 4 descargas enn el array descargas y espera a que finalicen, luego se suman los tiempos que tardaron y se muestra el tiempo total (si fuese 1 detrás de otra) y el real (la descarga más grande)
+     * Nivel 1 y 2
+     * Detecta el nivel y lanza las 4 descargas en el array descargas y espera a que finalicen, luego se suman los tiempos que tardaron y se muestra el tiempo total (si fuese 1 detrás de otra) y el real (la descarga más grande)
+     * Adicionalmente si el usuario selecciono el nivel 2 se mostrará los mensajes del monitor y se usarán las 4 descargas pasada por línea de comandos (en su defecto las 4 mismas que el nivel 1)
      */
-    public static void nivel1() {
-        //Declaración escanner
-        Scanner sc = new Scanner(System.in);
-        sc.useDelimiter("\n");
-
-
+    public static void nivel1y2(String[] args, int nivel) {
         //Descargas
-        Descarga[] descargas = {
-                new Descarga("cuarzos.png"),
-                new Descarga("meditacion.mp4"),
-                new Descarga("mantras.mp3"),
-                new Descarga("horoscopo.pdf")};
+        Descarga[] descargas = new Descarga[4];
+        if (nivel == 1 || (nivel == 2 && args.length != 4)) { //nivel 1
+            descargas[0] = new Descarga("cuarzos.png");
+            descargas[1] = new Descarga("meditacion.mp4");
+            descargas[2] = new Descarga("mantras.mp3");
+            descargas[3] = new Descarga("horoscopo.pdf");
+        }else{ //nivel 2
+            descargas[0] = new Descarga(args[0]);
+            descargas[1] = new Descarga(args[1]);
+            descargas[2] = new Descarga(args[2]);
+            descargas[3] = new Descarga(args[3]);
+        }
 
         //Start de las descargas
         for (Descarga d: descargas){
             d.start();
+        }
+
+        //Monitor del nivel 2
+        if(nivel == 2) {
+            Monitor monitor = new Monitor("Monitor1", descargas);
+            Thread thread = new Thread(monitor);
+            thread.start();
         }
 
         //Cálculo de tiempo y espera de fin de las descargas
@@ -55,7 +64,6 @@ public class GestorDescargas {
         System.out.println("Tiempo real: " + calcularMayorTiempoBloque(descargas).tiempoBloque * 10 + " ms");
         System.out.println("Tiempo si se hubieran descargado una detrás de otra: " + tiempoTotalDescargas + " ms");
 
-        sc.close(); //cierre scanner
     }
 
     /**
@@ -63,7 +71,7 @@ public class GestorDescargas {
      * @param descargas array de descargas
      * @return descarga con mayor tiempo x bloque
      */
-    private static Descarga calcularMayorTiempoBloque(Descarga[] descargas) {
+    public static Descarga calcularMayorTiempoBloque(Descarga[] descargas) {
         int mayorTiempo = 0;
         Descarga descargaConMayorTiempo = new Descarga("");
 
@@ -77,9 +85,6 @@ public class GestorDescargas {
         return descargaConMayorTiempo;
     }
 
-    public static void nivel2() {
-
-    }
 
 
 
