@@ -28,7 +28,7 @@
 
 ## Nivel 1
 
-Usando la clase `Descarga` creo un array de descargas y las arranco:
+Usando la clase `Descarga` creo un array de descargas y arranco los hilos con ellas:
 
 ```
 descargas[0] = new Descarga("cuarzos.png");
@@ -98,7 +98,7 @@ A continuación calculo el tiempo que han tardado las descargas y muestro los da
         }
   ```
   
-  Al lanzar el programa veo que los hilos se ejecutan de uno en uno en vez de hacerlo simultáneamente, ya que cada vez que arranca uno tiene que esperar a que termine.
+  Al lanzar el programa veo que los hilos se ejecutan de uno en uno en vez de hacerlo simultáneamente, ya que, cada vez que arranca uno, tiene que esperar a que termine.
 
   ![res1](./capturas/res1.png)
 
@@ -106,7 +106,7 @@ A continuación calculo el tiempo que han tardado las descargas y muestro los da
 
 ## Nivel 2
 
-En este nivel el usuario indica los 4 archivos, en caso que no los indique se utilizan los 4 de antes para ello compruebo de la siguiente forma:
+En este nivel el usuario indica los 4 archivos, en caso que no los indique se utilizan los 4 de antes, para ello compruebo de la siguiente forma:
 
 ```
 Descarga[] descargas = new Descarga[4];
@@ -210,7 +210,7 @@ if (nivel == 3) {
         }
 ```
 
-Después confirmo que el resto de hilos han terminado y muestro los tiempos al igual que `nivel 1`.
+Después confirmo que el resto de hilos han terminado y muestro los tiempos al igual que en el `nivel 1`.
 
 ### Ejecución
 
@@ -273,7 +273,7 @@ private int getNumeroDescargasVivas(){
     }
 ```
 
-La función anterior devuelve el número de descargas activas así que hasta que queden 0 compruebo cada `0.5s`:
+La función anterior devuelve el número de descargas activas, así que, hasta que queden 0, compruebo cada `0.5s`:
 
 ```java
 @Override
@@ -335,6 +335,8 @@ En esta parte cometí varios errores esperando los `3s` de la descarga de `medit
   https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html
 
 - Gemini - Generar tabla en Markdown
+
+  https://gemini.google.com/
 
   Prompt: Recrea esta tabla en markdown para un Readme en Github (adjuntada foto de la tabla)
 
