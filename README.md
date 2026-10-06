@@ -14,7 +14,7 @@
 
 ## Estructura del proyecto
 
-- `GestorDescargas` -> Clase con la que interectua el usuario mediante el `main`.
+- `GestorDescargas` -> Clase con la que interectúa el usuario mediante el `main`.
 
 - `Monitor` -> Clase que monitorea las descargas mostrando descargas restantes cada `0.5 s`(nivel 2).
 
@@ -98,7 +98,7 @@ A continuación calculo el tiempo que han tardado las descargas y muestro los da
         }
   ```
   
-  Al lanzar el programa veo que los hilos se ejecutan de uno en uno en vez de hacerlo simultaneamente, ya que cada vez que arranca uno tiene que esperar a que termine.
+  Al lanzar el programa veo que los hilos se ejecutan de uno en uno en vez de hacerlo simultáneamente, ya que cada vez que arranca uno tiene que esperar a que termine.
 
   ![res1](./capturas/res1.png)
 
@@ -188,7 +188,7 @@ El método `run()` de `Instalador` espera a que los hilos hayan terminado para i
     }
 ```
 
-En el `main` de `GestorDescargas`, después de hacer un `start()` a todos los hilos, instancio un objeto `Instalador` y espero 3 segundo, si depués de ese tiempo el hilo de `meditacion.mp4` sigue vivo imprimo al usuario una notificación.
+En el `main` de `GestorDescargas`, después de hacer un `start()` a todos los hilos, instancio un objeto `Instalador` y espero 3 segundos, si después de ese tiempo el hilo de `meditacion.mp4` sigue vivo imprimo al usuario una notificación.
 
 ```
 if (nivel == 3) {
@@ -226,7 +226,7 @@ Después confirmo que el resto de hilos han terminado y muestro los tiempos al i
 
 Después de pensar e investigar cuál era la mejor forma de calcular el tiempo real y ver varias alternativas, me acordé de que cada descarga se ejecuta en un hilo distinto, por lo tanto, como todas se ejecutan en paralelo, realmente solo necesito saber cuál fue la que más tardó (`tiempoBloque`).
 
-Para ello utilizo está función:
+Para ello utilizo esta función:
 
 ```java
     /**
@@ -259,7 +259,7 @@ System.out.println("Tiempo real: " + calcularMayorTiempoBloque(descargas).tiempo
 
 **Mostrar descargas activas**
 
-Estuve pensando en varias formas para que el hilo `monitor` comprobase cada `0.5 s` la cantidad de descargas activas, finalmente decidí usar `isAlive()` para comprobar si seguian activas con esta función.
+Estuve pensando en varias formas para que el hilo `monitor` comprobase cada `0.5 s` la cantidad de descargas activas, finalmente decidí usar `isAlive()` para comprobar si seguían activas con esta función.
 
 ```java
 private int getNumeroDescargasVivas(){
@@ -295,7 +295,7 @@ La función anterior devuelve el número de descargas activas así que hasta que
 
 ### Nivel 3
 
-En esta parte cometí varios errores esperando los `3s` de la descarga de `meditacion`, al final la forma más encilla que encontre para resolverlo fue esperar a que `meditacion` terminase por delante del resto de hilos.
+En esta parte cometí varios errores esperando los `3s` de la descarga de `meditacion`, al final la forma más sencilla que encontré para resolverlo fue esperar a que `meditacion` terminase por delante del resto de hilos.
 
 ```
     //Nivel 3
@@ -328,7 +328,7 @@ En esta parte cometí varios errores esperando los `3s` de la descarga de `medit
 
   https://www.w3schools.com/java/java_howto_random_number.asp
 
-- Documentación Oracle - `Runable y Thread`
+- Documentación Oracle - `Runnable y Thread`
 
   https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html
 
