@@ -70,6 +70,40 @@ A continuación calculo el tiempo que han tardado las descargas y muestro los da
 
 ![nivel1-2](./capturas/nivel1-2.png)
 
+### Respuestas
+
+| Ejecución | Descarga más lenta | Tiempo real (ms) | Suma (ms) |
+| :--- | :--- | :--- | :--- |
+| 1 | horoscopo.pdf | 3660ms | 10700 ms |
+| 2 | mantras.mp3 | 4170 ms | 12010 ms |
+| 3 | mantras.mp3 | 2880 ms | 8320 ms |
+
+- **¿Por qué el tiempo real es mucho menor que la suma?**
+
+  Porque cada descarga se lanza en un hilo distinto y se ejecutan todas a la vez en lugar de una en una (lo que haría que tardase lo mismo que la suma).
+
+- **¿Qué pasa si hacéis start() y join() dentro del mismo bucle? Probadlo y poned el tiempo real que os sale**
+
+  Para probarlo modifico el bucle encargado de lanzar los `hilos`:
+
+  ```
+  //Start de las descargas
+        for (Descarga d: descargas){
+            d.start();
+            try {
+                d.join();
+            }catch (InterruptedException e){
+                throw new RuntimeException();
+            }
+        }
+  ```
+  
+  Al lanzar el programa veo que los hilos se ejecutan de uno en uno en vez de hacerlo simultaneamente, ya que cada vez que arranca uno tiene que esperar a que termine.
+
+  ![res1](./capturas/res1.png)
+
+  ![res2](./capturas/res2.png)
+
 ## Nivel 2
 
 En este nivel el usuario indica los 4 archivos, en caso que no los indique se utilizan los 4 de antes para ello compruebo de la siguiente forma:
@@ -215,17 +249,94 @@ Para ello utilizo está función:
     }
 ```
 
-### Nivel 2
-
 Y la implemento así en mi código:
 
 ```
 System.out.println("Tiempo real: " + calcularMayorTiempoBloque(descargas).tiempoBloque * 10 + " ms");
 ```
 
+### Nivel 2
+
+**Mostrar descargas activas**
+
+Estuve pensando en varias formas para que el hilo `monitor` comprobase cada `0.5 s` la cantidad de descargas activas, finalmente decidí usar `isAlive()` para comprobar si seguian activas con esta función.
+
+```java
+private int getNumeroDescargasVivas(){
+        int contador = 0;
+        for(Descarga d: this.descargas){
+            if(d.isAlive()){ //si el hilo sigue vivo suma 1 al contador
+                contador++;
+            }
+        }
+        return contador;
+    }
+```
+
+La función anterior devuelve el número de descargas activas así que hasta que queden 0 compruebo cada `0.5s`:
+
+```java
+@Override
+    public void run(){
+        while(this.getNumeroDescargasVivas() != 0){ //mientras queden descargas en curso
+            System.out.println("[Monitor] Descargas en curso: " + this.getNumeroDescargasVivas());
+            try{
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        //Cuando no quedan más descargas
+        System.out.println("[Monitor] No queda ninguna descarga en curso");
+    }
+
+```
+
+### Nivel 3
+
+En esta parte cometí varios errores esperando los `3s` de la descarga de `meditacion`, al final la forma más encilla que encontre para resolverlo fue esperar a que `meditacion` terminase por delante del resto de hilos.
+
+```
+    //Nivel 3
+          if(nivel == 3) {
+            try {
+                //Espera 3 segundos y si el hilo de meditacion.mp4 (posicion 1 del array) sigue vivo imprime [Main] meditacionmp4 sigue en segundo plano
+                Thread.sleep(3000);
+                if (descargas[1].isAlive()) { //si sigue vivo
+                    System.out.println("[Main] " + descargas[1].nombreArchivo + " sigue en segundo plano");
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Cálculo de tiempo y espera de fin de las descargas
+        int tiempoTotalDescargas =0;
+        try {
+            for (Descarga d: descargas){
+                d.join();
+                tiempoTotalDescargas += d.tiempoBloque * 10; //utilizo el tiempoBloque de cada descarga y lo multiplico por 10
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+```
+
 ## Bibliografía
 
-- W3Schools - generar números aleatorios
+- W3Schools - Generar números aleatorios
 
   https://www.w3schools.com/java/java_howto_random_number.asp
 
+- Documentación Oracle - `Runable y Thread`
+
+  https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html
+
+  https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html
+
+- Gemini - Generar tabla en Markdown
+
+  Prompt: Recrea esta tabla en markdown para un Readme en Github (adjuntada foto de la tabla)
+
+  Modificaciones: Ninguna en la tabla como tal, sólo rellené los campos con las respuestas
+  
