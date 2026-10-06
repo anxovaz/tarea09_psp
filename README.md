@@ -10,7 +10,7 @@
 
 ## Niveles hechos
 
-**1, 2 y 3**
+- **1, 2 y 3**
 
 ## Estructura del proyecto
 
