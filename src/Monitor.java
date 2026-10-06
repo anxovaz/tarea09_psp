@@ -9,7 +9,6 @@ public class Monitor implements Runnable{
         this.nombreMonitor = nombre;
         this.descargas = descargas;
 
-
     }
 
     /**

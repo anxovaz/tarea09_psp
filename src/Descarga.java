@@ -14,7 +14,9 @@ public class Descarga extends Thread {
 
     }
 
-
+    /**
+     * Método que simula una Descarga mostrando su porcentaje de descarga unas 10 veces, al terminar a descarga muestra el tiempo que ha tardado
+     */
     @Override
     public void run() {
         //hace 10 iteraciones. En cada una duerme el tiempo de un bloque e imprime el progreso
@@ -22,11 +24,11 @@ public class Descarga extends Thread {
         int tiempoTotal = 0;
         for(int i = 0; i<10;i++) {
             System.out.println("[" + this.nombreArchivo + "] " + porcentaje + "%" );
-            porcentaje+=10;
+            porcentaje+=10; //son 10 iteraciones por lo cual cada iteración supone un 10% del archivo descargado
             try {
                 Thread.sleep(this.tiempoBloque);
                 //podría simplemente multiplicarlo por 10 al terminar, pero prefiero hacerlo así para que si en un futuro se cambian las iteraciones sólo se tenga que modificar el for
-                tiempoTotal += this.tiempoBloque;
+                tiempoTotal += this.tiempoBloque; //tiempo total = tiempobloque x 10
             }catch(InterruptedException e){
                 System.out.println("Ocurrió un error durante la descarga: " + e);
             }

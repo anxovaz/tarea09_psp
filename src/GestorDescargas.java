@@ -6,23 +6,15 @@ import java.util.Scanner;
  */
 public class GestorDescargas {
     /**
-     * Main que pide al usuario números (selectorNivel) y lanza el nivel correspondiente
+     * Main que pide al usuario el nivel y lanza el programa en función de lo escogido
      * @param args
      */
     public static void main(String[] args) {
-        int opcion = selectorNivel();
-        nivel1y2(args, opcion);
-    }
+        System.out.println("Anxo Vázquez Lorenzo"); //para que salga en las capturas
 
-    /**
-     * Nivel 1 y 2
-     * Detecta el nivel y lanza las 4 descargas en el array descargas y espera a que finalicen, luego se suman los tiempos que tardaron y se muestra el tiempo total (si fuese 1 detrás de otra) y el real (la descarga más grande)
-     * Adicionalmente si el usuario selecciono el nivel 2 se mostrará los mensajes del monitor y se usarán las 4 descargas pasada por línea de comandos (en su defecto las 4 mismas que el nivel 1)
-     */
-    public static void nivel1y2(String[] args, int nivel) {
-        //Descargas
+        int nivel = selectorNivel();
         Descarga[] descargas = new Descarga[4];
-        if (nivel == 1 || (nivel == 2 && args.length != 4)) { //nivel 1
+        if (nivel == 1 || nivel == 3 || (nivel == 2 && args.length != 4)) { //nivel 1 y 3 (o el 2 si el usuario no indica los 4 archivos por línea de comandos
             descargas[0] = new Descarga("cuarzos.png");
             descargas[1] = new Descarga("meditacion.mp4");
             descargas[2] = new Descarga("mantras.mp3");
@@ -39,6 +31,8 @@ public class GestorDescargas {
             d.start();
         }
 
+        //descargas[1].tiempoBloque=1000; //Para probar el nivel 3 descomentar esta línea para hacer que el hilo tarde +3s siempre (así se ahorra el ejecutarlo varias veces y que random genere un número inferior a 300)
+
         //Monitor del nivel 2
         if(nivel == 2) {
             Monitor monitor = new Monitor("Monitor1", descargas);
@@ -46,13 +40,30 @@ public class GestorDescargas {
             thread.start();
         }
 
+        Instalador instalador = new Instalador("Instalador", new Descarga[]{descargas[1], descargas[2]}); //meditacion y mantras
+        instalador.start();
+
+
+
+        //Nivel 3
+        if(nivel == 3) {
+            try {
+                //Espera 3 segundos y si el hilo de meditacion.mp4 (posicion 1 del array) sigue vivo imprime [Main] meditacionmp4 sigue en segundo plano
+                Thread.sleep(3000);
+                if (descargas[1].isAlive()) { //si sigue vivo
+                    System.out.println("[Main] " + descargas[1].nombreArchivo + " sigue en segundo plano");
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         //Cálculo de tiempo y espera de fin de las descargas
         int tiempoTotalDescargas =0;
-
         try {
             for (Descarga d: descargas){
                 d.join();
-                tiempoTotalDescargas += d.tiempoBloque * 10;
+                tiempoTotalDescargas += d.tiempoBloque * 10; //utilizo el tiempoBloque de cada descarga y lo multiplico por 10
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
