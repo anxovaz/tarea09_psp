@@ -40,8 +40,10 @@ public class GestorDescargas {
             thread.start();
         }
 
-        Instalador instalador = new Instalador("Instalador", new Descarga[]{descargas[1], descargas[2]}); //meditacion y mantras
-        instalador.start();
+        if (nivel == 3) {
+            Instalador instalador = new Instalador("Instalador", new Descarga[]{descargas[1], descargas[2]}); //meditacion y mantras
+            instalador.start();
+        }
 
 
 
