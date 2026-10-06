@@ -5,7 +5,11 @@ public class GestorDescargas {
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
 
-        nivel1();
+        if(selectorNivel() == 1){
+            nivel1();
+        } else if (selectorNivel() == 2) {
+            nivel2();
+        }
 
 
         sc.close();
@@ -73,5 +77,31 @@ public class GestorDescargas {
         return descargaConMayorTiempo;
     }
 
+    public static void nivel2() {
+
+    }
+
+
+
+    /**
+     * Selector de Nivel que pide al usuario que seleccione un nivel
+     * @return Integer indicando el nivel
+     */
+    private static int selectorNivel() {
+        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n");
+
+        String teclado;
+        while(true) {
+            System.out.println("Introuce nivel:\n1. Nivel 1\n2. Nivel 2\n3. Nivel 3 ");
+            teclado = sc.next();
+
+            if((teclado.compareTo("1") == 0) || (teclado.compareTo("2") == 0) || (teclado.compareTo("3") == 0)){
+                sc.close();
+                return Integer.parseInt(teclado);
+            }
+            System.out.println("Valor incorrecto, vuelve a intentarlo\n---");
+        }
+    }
 
 }
